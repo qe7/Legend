@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+group = "io.github.qe7"
+version = "1.0.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+
+    maven {
+        name = 'impactdevelopment-repo'
+        url = 'https://impactdevelopment.github.io/maven/'
+    }
+}
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.11.0'
+    implementation 'commons-io:commons-io:2.16.1'
+    implementation 'com.github.ZeroMemes:Alpine:3.1.0'
+
+    implementation fileTree(dir: 'workspace/bin', include: ['*.jar'])
+}
