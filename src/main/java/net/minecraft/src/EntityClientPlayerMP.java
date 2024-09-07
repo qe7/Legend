@@ -4,6 +4,9 @@
 
 package net.minecraft.src;
 
+import io.github.qe7.Client;
+import io.github.qe7.features.impl.modules.impl.NoFallModule;
+import io.github.qe7.features.impl.modules.impl.TileEntityDupeModule;
 import net.minecraft.client.Minecraft;
 
 // Referenced classes of package net.minecraft.src:
@@ -52,6 +55,10 @@ public class EntityClientPlayerMP extends EntityPlayerSP
 
     public void func_4056_N()
     {
+    	if(Client.getInstance().getModuleManager().registry.get(TileEntityDupeModule.class).isEnabled()) {
+    		sendQueue.addToSendQueue(new Packet0KeepAlive());
+    		return;
+    	}
         if(field_9380_bx++ == 20)
         {
             sendInventoryChanged();
@@ -79,6 +86,7 @@ public class EntityClientPlayerMP extends EntityPlayerSP
         boolean flag2 = d4 != 0.0D || d5 != 0.0D;
         if(ridingEntity != null)
         {
+        	if(!Client.getInstance().getModuleManager().registry.get(NoFallModule.class).isEnabled()) {
             if(flag2)
             {
                 sendQueue.addToSendQueue(new Packet11PlayerPosition(motionX, -999D, -999D, motionZ, onGround));
@@ -86,25 +94,46 @@ public class EntityClientPlayerMP extends EntityPlayerSP
             {
                 sendQueue.addToSendQueue(new Packet13PlayerLookMove(motionX, -999D, -999D, motionZ, rotationYaw, rotationPitch, onGround));
             }
+        	} else {
+        		if(flag2)
+                {
+                    sendQueue.addToSendQueue(new Packet11PlayerPosition(motionX, -999D, -999D, motionZ, true));
+                } else
+                {
+                    sendQueue.addToSendQueue(new Packet13PlayerLookMove(motionX, -999D, -999D, motionZ, rotationYaw, rotationPitch, true));
+                }
+        	}
             flag1 = false;
         } else
         if(flag1 && flag2)
         {
-            sendQueue.addToSendQueue(new Packet13PlayerLookMove(posX, boundingBox.minY, posY, posZ, rotationYaw, rotationPitch, onGround));
+        	if(!Client.getInstance().getModuleManager().registry.get(NoFallModule.class).isEnabled()) {
+        		sendQueue.addToSendQueue(new Packet13PlayerLookMove(posX, boundingBox.minY, posY, posZ, rotationYaw, rotationPitch, onGround));
+        	} else
+        		sendQueue.addToSendQueue(new Packet13PlayerLookMove(posX, boundingBox.minY, posY, posZ, rotationYaw, rotationPitch, true));
             field_12242_bI = 0;
         } else
         if(flag1)
         {
+        	if(!Client.getInstance().getModuleManager().registry.get(NoFallModule.class).isEnabled()) {
             sendQueue.addToSendQueue(new Packet11PlayerPosition(posX, boundingBox.minY, posY, posZ, onGround));
+        	} else
+        		sendQueue.addToSendQueue(new Packet11PlayerPosition(posX, boundingBox.minY, posY, posZ, true));
             field_12242_bI = 0;
         } else
         if(flag2)
         {
+        	if(!Client.getInstance().getModuleManager().registry.get(NoFallModule.class).isEnabled()) {
             sendQueue.addToSendQueue(new Packet12PlayerLook(rotationYaw, rotationPitch, onGround));
+        	} else
+        		sendQueue.addToSendQueue(new Packet12PlayerLook(rotationYaw, rotationPitch, true));
             field_12242_bI = 0;
         } else
         {
+        	if(!Client.getInstance().getModuleManager().registry.get(NoFallModule.class).isEnabled()) {
             sendQueue.addToSendQueue(new Packet10Flying(onGround));
+        	} else
+        		sendQueue.addToSendQueue(new Packet10Flying(true));
             if(field_9382_bF != onGround || field_12242_bI > 200)
             {
                 field_12242_bI = 0;

@@ -4,8 +4,13 @@
 
 package net.minecraft.src;
 
+import io.github.qe7.features.impl.modules.impl.StepModule;
 import java.util.List;
 import java.util.Random;
+
+import io.github.qe7.Client;
+import io.github.qe7.features.impl.modules.impl.FullBrightModule;
+import io.github.qe7.features.impl.modules.impl.NoFallModule;
 
 // Referenced classes of package net.minecraft.src:
 //            AxisAlignedBB, DataWatcher, World, MathHelper, 
@@ -272,6 +277,10 @@ public abstract class Entity
             posZ = (boundingBox.minZ + boundingBox.maxZ) / 2D;
             return;
         }
+        if(Client.getInstance().getModuleManager().registry.get(StepModule.class).isEnabled()) {
+        	this.stepHeight = 1.0f;
+        } else
+        	this.stepHeight = 0.5f;
         ySize *= 0.4F;
         double d3 = posX;
         double d4 = posZ;
@@ -633,6 +642,9 @@ public abstract class Entity
 
     public float getEntityBrightness(float f)
     {
+    	if(Client.getInstance().getModuleManager().registry.get(FullBrightModule.class).isEnabled()) {
+    		return 1.0f;
+    	}
         int i = MathHelper.floor_double(posX);
         double d = (boundingBox.maxY - boundingBox.minY) * 0.66000000000000003D;
         int j = MathHelper.floor_double((posY - (double)yOffset) + d);
@@ -1280,7 +1292,7 @@ public abstract class Entity
     public float height;
     public float prevDistanceWalkedModified;
     public float distanceWalkedModified;
-    protected float fallDistance;
+    public float fallDistance;
     private int nextStepDistance;
     public double lastTickPosX;
     public double lastTickPosY;

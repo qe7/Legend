@@ -7,6 +7,10 @@ package net.minecraft.src;
 import java.io.*;
 import java.net.*;
 import java.util.Random;
+
+import io.github.qe7.Client;
+import io.github.qe7.events.TickUpdateEvent;
+import io.github.qe7.events.packet.OutgoingPacketEvent;
 import net.minecraft.client.Minecraft;
 
 // Referenced classes of package net.minecraft.src:
@@ -402,6 +406,7 @@ public class NetClientHandler extends NetHandler
             return;
         } else
         {
+        	Client.getEventBus().post(new OutgoingPacketEvent(packet));
             netManager.addToSendQueue(packet);
             return;
         }

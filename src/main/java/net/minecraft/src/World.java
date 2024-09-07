@@ -7,6 +7,9 @@ package net.minecraft.src;
 import java.io.PrintStream;
 import java.util.*;
 
+import io.github.qe7.Client;
+import io.github.qe7.features.impl.modules.impl.FullBrightModule;
+
 // Referenced classes of package net.minecraft.src:
 //            IBlockAccess, WorldProvider, WorldInfo, MapStorage, 
 //            ISaveHandler, ChunkProvider, EntityPlayer, ChunkProviderLoadOrGenerate, 
@@ -787,6 +790,9 @@ public class World
 
     public float getLightBrightness(int i, int j, int k)
     {
+    	if(Client.getInstance().getModuleManager().registry.get(FullBrightModule.class).isEnabled()) {
+    		return 10.0f;
+    	}
         return worldProvider.lightBrightnessTable[getBlockLightValue(i, j, k)];
     }
 
