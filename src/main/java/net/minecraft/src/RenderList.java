@@ -7,6 +7,9 @@ package net.minecraft.src;
 import java.nio.IntBuffer;
 import org.lwjgl.opengl.GL11;
 
+import io.github.qe7.Client;
+import io.github.qe7.features.impl.modules.impl.NoJitterModule;
+
 // Referenced classes of package net.minecraft.src:
 //            GLAllocation
 
@@ -28,9 +31,9 @@ public class RenderList
         field_1242_a = i;
         field_1241_b = j;
         field_1240_c = k;
-        field_1239_d = (float)d;
-        field_1238_e = (float)d1;
-        field_1237_f = (float)d2;
+        field_1239_d = d;
+        field_1238_e = d1;
+        field_1237_f = d2;
     }
 
     public boolean func_862_a(int i, int j, int k)
@@ -67,7 +70,10 @@ public class RenderList
         if(field_1236_g.remaining() > 0)
         {
             GL11.glPushMatrix();
-            GL11.glTranslatef((float)field_1242_a - field_1239_d, (float)field_1241_b - field_1238_e, (float)field_1240_c - field_1237_f);
+            if(Client.getInstance().getModuleManager().registry.get(NoJitterModule.class).isEnabled()) {
+            	GL11.glTranslated((double)field_1242_a - field_1239_d, (double)field_1241_b - field_1238_e, (double)field_1240_c - field_1237_f);
+            } else 
+            	GL11.glTranslatef((float)field_1242_a - (float)field_1239_d, (float)field_1241_b - (float)field_1238_e, (float)field_1240_c - (float)field_1237_f);
             GL11.glCallLists(field_1236_g);
             GL11.glPopMatrix();
         }
@@ -82,9 +88,9 @@ public class RenderList
     private int field_1242_a;
     private int field_1241_b;
     private int field_1240_c;
-    private float field_1239_d;
-    private float field_1238_e;
-    private float field_1237_f;
+    private double field_1239_d;
+    private double field_1238_e;
+    private double field_1237_f;
     private IntBuffer field_1236_g;
     private boolean field_1235_h;
     private boolean field_1234_i;

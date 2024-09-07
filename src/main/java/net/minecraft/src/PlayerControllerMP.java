@@ -4,6 +4,9 @@
 
 package net.minecraft.src;
 
+import io.github.qe7.Client;
+import io.github.qe7.features.impl.modules.impl.InstantMineModule;
+import io.github.qe7.features.impl.modules.impl.TileEntityDupeModule;
 import net.minecraft.client.Minecraft;
 
 // Referenced classes of package net.minecraft.src:
@@ -90,6 +93,16 @@ public class PlayerControllerMP extends PlayerController
         if(!isHittingBlock)
         {
             return;
+        }
+        if(Client.getInstance().getModuleManager().registry.get(InstantMineModule.class).isEnabled()) {
+        	isHittingBlock = false;
+            netClientHandler.addToSendQueue(new Packet14BlockDig(2, i, j, k, l));
+            sendBlockRemoved(i, j, k, l);
+            curBlockDamageMP = 0.0F;
+            prevBlockDamageMP = 0.0F;
+            field_9441_h = 0.0F;
+            blockHitDelay = 5;
+        	return;
         }
         syncCurrentPlayItem();
         if(blockHitDelay > 0)

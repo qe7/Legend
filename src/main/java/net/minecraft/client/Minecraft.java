@@ -25,7 +25,8 @@ import java.io.File;
 public abstract class Minecraft
         implements Runnable {
 
-    public Minecraft(Component component, Canvas canvas, MinecraftApplet minecraftapplet, int i, int j, boolean flag) {
+    public Block breakingBlock;
+	public Minecraft(Component component, Canvas canvas, MinecraftApplet minecraftapplet, int i, int j, boolean flag) {
         fullscreen = false;
         hasCrashed = false;
         timer = new Timer(20F);
@@ -648,9 +649,11 @@ public abstract class Minecraft
             int j = objectMouseOver.blockX;
             int k = objectMouseOver.blockY;
             int l = objectMouseOver.blockZ;
+            breakingBlock = Block.blocksList[this.theWorld.getBlockId(j, k, l)];
             playerController.sendBlockRemoving(j, k, l, objectMouseOver.sideHit);
             effectRenderer.addBlockHitEffects(j, k, l, objectMouseOver.sideHit);
         } else {
+			breakingBlock = null;
             playerController.resetBlockRemoving();
         }
     }
@@ -782,6 +785,10 @@ public abstract class Minecraft
     }
 
     public void runTick() {
+    	if(this.needToReconnect) {
+    		this.displayGuiScreen(new GuiConnecting(this, this.gameSettings.lastServer.split("_")[0], 25565));
+    		this.needToReconnect = false;
+    	}
         if (ticksRan == 6000) {
             func_28001_B();
         }
@@ -1379,5 +1386,6 @@ public abstract class Minecraft
     public boolean isRaining;
     long systemTime;
     private int joinPlayerCounter;
+	public boolean needToReconnect;
 
 }

@@ -4,6 +4,8 @@
 
 package net.minecraft.src;
 
+import io.github.qe7.Client;
+import io.github.qe7.features.impl.modules.impl.AutoWalkModule;
 
 // Referenced classes of package net.minecraft.src:
 //            MovementInput, GameSettings, KeyBinding, EntityPlayer
@@ -63,7 +65,7 @@ public class MovementInputFromOptions extends MovementInput
     {
         moveStrafe = 0.0F;
         moveForward = 0.0F;
-        if(movementKeyStates[0])
+        if(movementKeyStates[0] || Client.getInstance().getModuleManager().registry.get(AutoWalkModule.class).isEnabled())
         {
             moveForward++;
         }

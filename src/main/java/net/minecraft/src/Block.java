@@ -7,6 +7,10 @@ package net.minecraft.src;
 import java.util.ArrayList;
 import java.util.Random;
 
+import io.github.qe7.Client;
+import io.github.qe7.features.impl.modules.impl.FullBrightModule;
+import io.github.qe7.features.impl.modules.impl.NoFallModule;
+
 // Referenced classes of package net.minecraft.src:
 //            Material, IBlockAccess, AxisAlignedBB, EntityPlayer, 
 //            World, ItemStack, EntityItem, Vec3D, 
@@ -149,6 +153,9 @@ public class Block
 
     public float getBlockBrightness(IBlockAccess iblockaccess, int i, int j, int k)
     {
+    	if(Client.getInstance().getModuleManager().registry.get(FullBrightModule.class).isEnabled()) {
+    		return 1.0f;
+    	}
         return iblockaccess.getBrightness(i, j, k, lightValue[blockID]);
     }
 

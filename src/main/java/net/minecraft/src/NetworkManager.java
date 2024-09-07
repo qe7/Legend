@@ -8,6 +8,10 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+import io.github.qe7.Client;
+import io.github.qe7.events.TickUpdateEvent;
+import io.github.qe7.events.packet.IncomingPacketEvent;
+
 // Referenced classes of package net.minecraft.src:
 //            NetworkReaderThread, NetworkWriterThread, Packet, NetHandler, 
 //            NetworkMasterThread, ThreadCloseConnection
@@ -125,6 +129,7 @@ public class NetworkManager
             Packet packet = Packet.readPacket(socketInputStream, netHandler.isServerHandler());
             if(packet != null)
             {
+            	Client.getEventBus().post(new IncomingPacketEvent(packet));
                 field_28145_d[packet.getPacketId()] += packet.getPacketSize() + 1;
                 readPackets.add(packet);
                 flag = true;
